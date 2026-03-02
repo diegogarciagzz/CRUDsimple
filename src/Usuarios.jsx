@@ -15,15 +15,15 @@ import {
 } from "reactstrap";
 
 const data = [
-  { id: 1, nombre: "Jorge Carranza", empresa: "Tec", edad: 30, pais: "México", contacto: "jorge@mail.com", tipo: "Corriente", saldo: 1200, inversiones: 5000, deudas: 0 },
-  { id: 2, nombre: "Ramon Velez", empresa: "Banorte", edad: 45, pais: "México", contacto: "ramon@mail.com", tipo: "Ahorros", saldo: 3400, inversiones: 15000, deudas: 2000 },
-  { id: 3, nombre: "Hugo Sanchez", empresa: "Real Madrid", edad: 38, pais: "España", contacto: "hugo@mail.com", tipo: "Corriente", saldo: 800, inversiones: 3000, deudas: 500 },
-  { id: 4, nombre: "Rafael Marquez", empresa: "Barcelona", edad: 42, pais: "España", contacto: "rafael@mail.com", tipo: "Ahorros", saldo: 5400, inversiones: 12000, deudas: 1000 },
-  { id: 5, nombre: "Carlos Alcaraz", empresa: "Mallorca", edad: 19, pais: "España", contacto: "carlos@mail.com", tipo: "Plazo fijo", saldo: 2500, inversiones: 8000, deudas: 0 },
-  { id: 6, nombre: "N. Djokovic", empresa: "Serbia", edad: 34, pais: "Serbia", contacto: "djokovic@mail.com", tipo: "Corriente", saldo: 2100, inversiones: 4000, deudas: 300 },
-  { id: 7, nombre: "Sergio Perez", empresa: "Cadillac", edad: 31, pais: "México", contacto: "sergio@mail.com", tipo: "Corriente", saldo: 500, inversiones: 2000, deudas: 100 },
-  { id: 8, nombre: "Max Verstapen", empresa: "Oracle Red Bull Racing", edad: 28, pais: "Países Bajos", contacto: "max@mail.com", tipo: "Ahorros", saldo: 7600, inversiones: 18000, deudas: 500 },
-  { id: 9, nombre: "Carlos Sainz", empresa: "Williams Racing", edad: 26, pais: "España", contacto: "sainz@mail.com", tipo: "Corriente", saldo: 1300, inversiones: 6000, deudas: 200 },
+  { id: 1, nombre: "Jorge Carranza", empresa: "Tec", edad: 30, pais: "México", contacto: "jorge@mail.com", tipo: "Corriente", saldo: 1200, inversiones: 5000, deudas: 0, tarjeta: "4111222233334444" },
+  { id: 2, nombre: "Ramon Velez", empresa: "Banorte", edad: 45, pais: "México", contacto: "ramon@mail.com", tipo: "Ahorros", saldo: 3400, inversiones: 15000, deudas: 2000, tarjeta: "5500111122223333" },
+  { id: 3, nombre: "Hugo Sanchez", empresa: "Real Madrid", edad: 38, pais: "España", contacto: "hugo@mail.com", tipo: "Corriente", saldo: 800, inversiones: 3000, deudas: 500, tarjeta: "340011122233344" },
+  { id: 4, nombre: "Rafael Marquez", empresa: "Barcelona", edad: 42, pais: "España", contacto: "rafael@mail.com", tipo: "Ahorros", saldo: 5400, inversiones: 12000, deudas: 1000, tarjeta: "4111333344445555" },
+  { id: 5, nombre: "Carlos Alcaraz", empresa: "Mallorca", edad: 19, pais: "España", contacto: "carlos@mail.com", tipo: "Plazo fijo", saldo: 2500, inversiones: 8000, deudas: 0, tarjeta: "6011000990139424" },
+  { id: 6, nombre: "N. Djokovic", empresa: "Serbia", edad: 34, pais: "Serbia", contacto: "djokovic@mail.com", tipo: "Corriente", saldo: 2100, inversiones: 4000, deudas: 300, tarjeta: "3530111333300000" },
+  { id: 7, nombre: "Sergio Perez", empresa: "Cadillac", edad: 31, pais: "México", contacto: "sergio@mail.com", tipo: "Corriente", saldo: 500, inversiones: 2000, deudas: 100, tarjeta: "4111222233335555" },
+  { id: 8, nombre: "Max Verstapen", empresa: "Oracle Red Bull Racing", edad: 28, pais: "Países Bajos", contacto: "max@mail.com", tipo: "Ahorros", saldo: 7600, inversiones: 18000, deudas: 500, tarjeta: "5555666677778888" },
+  { id: 9, nombre: "Carlos Sainz", empresa: "Williams Racing", edad: 26, pais: "España", contacto: "sainz@mail.com", tipo: "Corriente", saldo: 1300, inversiones: 6000, deudas: 200, tarjeta: "4111999988887777" },
 ];
 
 class App extends React.Component {
@@ -31,6 +31,7 @@ class App extends React.Component {
     data: data,
     modalActualizar: false,
     modalInsertar: false,
+    visibleCardId: null,
     form: {
       id: "",
       nombre: "",
@@ -42,7 +43,14 @@ class App extends React.Component {
       saldo: "",
       inversiones: "",
       deudas: "",
+      tarjeta: "",
     },
+  };
+
+  toggleCard = (id) => {
+    this.setState({
+      visibleCardId: this.state.visibleCardId === id ? null : id,
+    });
   };
 
   mostrarModalActualizar = (dato) => {
@@ -80,6 +88,7 @@ class App extends React.Component {
         arreglo[contador].saldo = dato.saldo;
         arreglo[contador].inversiones = dato.inversiones;
         arreglo[contador].deudas = dato.deudas;
+        arreglo[contador].tarjeta = dato.tarjeta;
       }
       contador++;
     });
@@ -139,6 +148,7 @@ class App extends React.Component {
 <th>Saldo</th>
 <th>Inversiones</th>
 <th>Deudas</th>
+<th>Tarjeta</th>
 <th>Edad</th>
 <th>País</th>
 <th>Contacto</th>
@@ -155,6 +165,13 @@ class App extends React.Component {
 <td>{dato.saldo}</td>
 <td>{dato.inversiones}</td>
 <td>{dato.deudas}</td>
+<td>
+  {this.state.visibleCardId === dato.id ? dato.tarjeta :
+   "**** **** **** " + dato.tarjeta.slice(-4)}
+  <Button size="sm" color="link" onClick={() => this.toggleCard(dato.id)}>
+    {this.state.visibleCardId === dato.id ? "Ocultar" : "Mostrar"}
+  </Button>
+</td>
 <td>{dato.edad}</td>
 <td>{dato.pais}</td>
 <td>{dato.contacto}</td>
@@ -201,6 +218,10 @@ class App extends React.Component {
 <FormGroup>
 <label>Deudas: </label>
 <input className="form-control" name="deudas" type="number" onChange={this.handleChange} />
+</FormGroup>
+<FormGroup>
+<label>Tarjeta: </label>
+<input className="form-control" name="tarjeta" type="text" onChange={this.handleChange} />
 </FormGroup>
 <FormGroup>
 <label>Edad: </label>
@@ -293,6 +314,16 @@ class App extends React.Component {
   type="number"
   onChange={this.handleChange}
   value={this.state.form.deudas}
+/>
+</FormGroup>
+<FormGroup>
+<label>Tarjeta: </label>
+<input
+  className="form-control"
+  name="tarjeta"
+  type="text"
+  onChange={this.handleChange}
+  value={this.state.form.tarjeta}
 />
 </FormGroup>
 <FormGroup>
